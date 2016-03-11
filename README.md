@@ -1,7 +1,8 @@
 # LomeTation
 LomeTation is a homeautomation system using NodeJs and wcPlay.
 It´s purpose is to run any "linux embedded computer" like Raspberry PI, Odroid C1, ... that supports(and runs) NodeJs.
-Design you homeautomation-logic and let your embedded-system run it.
+
+Design your own homeautomation-logic graphically and let your embedded-system run it!
 
 # How can I use it?
 1. Install NodeJs (on your server)
@@ -41,6 +42,6 @@ JSON-Service (and websockets)
  
 # Webfrontend
 I personally use a modified version of Freeboard - pretty cool work!
-![wcPlay](wcPlay.png)
+![Freeboard](Freeboard.png)
 
 (Temperatures are received from some NET-AVR-IO from Pollin)
