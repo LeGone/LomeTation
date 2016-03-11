@@ -1,3 +1,12 @@
+/**************************************************************************
+ * BROADCAST-SERVICE
+ * Copyright (C) 2016 Raffael Holz aka LeGone - All Rights Reserved
+ * http://www.legone.name
+ *
+ * You may use, distribute and modify this code under the
+ * terms of the MIT license.
+ **************************************************************************/
+ 
 // A few core-requires
 var fs = require('fs');
 var vm = require('vm');
