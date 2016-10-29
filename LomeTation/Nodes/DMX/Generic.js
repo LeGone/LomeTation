@@ -19,12 +19,12 @@ function createDeviceIfNotExists(device)
 		// Clear (set to 0) all channels. Always do this.
 		for (var i = 1; i < 513; i++)
 		{
-			DMXGeneric[device][+i] = 0x00;	
+			DMXGeneric[device][+i] = 0x00;
 		}
 	}
 }
 
-wcNodeProcess.extend('NodeDMXGenericWriteChannel', 'Write DMX Channel', 'DMX',
+wcPlayNodes.wcNodeProcess.extend('NodeDMXGenericWriteChannel', 'Write DMX Channel', 'DMX',
 {
 	init: function(parent, pos)
 	{
@@ -65,7 +65,7 @@ wcNodeProcess.extend('NodeDMXGenericWriteChannel', 'Write DMX Channel', 'DMX',
 	},
 });
 
-wcNodeProcess.extend('NodeDMXGenericReadChannel', 'Read DMX Channel', 'DMX',
+wcPlayNodes.wcNodeProcess.extend('NodeDMXGenericReadChannel', 'Read DMX Channel', 'DMX',
 {
 	init: function(parent, pos)
 	{
@@ -91,78 +91,8 @@ wcNodeProcess.extend('NodeDMXGenericReadChannel', 'Read DMX Channel', 'DMX',
 	},
 });
 
-wcNodeProcess.extend('NodeDMXGenericUpdateObsolete', 'Update DMX', 'DMX',
-{
-	init: function(parent, pos)
-	{
-		this._super(parent, pos);
 
-		this.description("Update Generic DMX");
-		
-		this.createExit('error');
-		
-		this.createProperty('device', wcPlay.PROPERTY.STRING, '/dev/ttyUSB0', {description: "NoDescriptionAvailable", input: true});
-	},
-
-	onActivated: function(name)
-	{
-		this._super(name);
-		
-		var self = this;
-
-		var devicePath = this.property('device');
-		
-		createDeviceIfNotExists(devicePath);
-		
-		var device = new SerialPort(devicePath,
-		{
-			baudrate: 250000,
-			stopbits: 2,
-			rtscts: 0,
-			flowcontrol: 0,
-			xon: 0,
-			xoff: 0,
-		}, false);
-		
-		device.open(function (error)
-		{
-			if (error)
-			{
-				console.log('failed to open: ' + error);
-				self.activateExit('error');
-			}
-			else
-			{
-				device.on('error', function(error)
-				{								
-					console.log(error);
-					self.activateExit('error');
-				});
-
-				device.set({brk:true}, function(err, something)
-				{
-					setTimeout(clear, 50);
-				});
-				
-				function clear()
-				{
-					device.set({brk:false}, function(err, something)
-					{
-						device.write(DMXGeneric[devicePath], function(err, results)
-						{
-							device.close(function ()
-							{
-								self.activateExit('out');
-							});
-						});
-					});
-				}
-			}
-		});
-	},
-});
-
-wcNodeEntry.extend('NodeDMXGenericUpdater', 'Update DMX', 'DMX',
+wcPlayNodes.wcNodeEntry.extend('NodeDMXGenericUpdater', 'Update DMX', 'DMX',
 {
 	init: function(parent, pos)
 	{
@@ -190,11 +120,12 @@ wcNodeEntry.extend('NodeDMXGenericUpdater', 'Update DMX', 'DMX',
 		{
 			baudrate: 250000,
 			stopbits: 2,
-			rtscts: 0,
-			flowcontrol: 0,
-			xon: 0,
-			xoff: 0,
-		}, false);
+			rtscts: false,
+			flowcontrol: false,
+			xon: false,
+			xoff: false,
+			autoOpen: false
+		});
 		
 		device.open(function (error)
 		{
@@ -225,7 +156,7 @@ wcNodeEntry.extend('NodeDMXGenericUpdater', 'Update DMX', 'DMX',
 				}
 
 				device.on('error', function(error)
-				{								
+				{
 					console.log(error);
 				});
 
@@ -241,7 +172,7 @@ wcNodeEntry.extend('NodeDMXGenericUpdater', 'Update DMX', 'DMX',
 	},
 });
 
-wcNodeProcess.extend('NodeDMXUniversalJson', 'DMX(512 Channels) to/from JSON', 'DMX',
+wcPlayNodes.wcNodeProcess.extend('NodeDMXRGBJson', 'RGB-LED-DMX to/from JSON', 'DMX',
 {
 	init: function(parent, pos)
 	{
@@ -261,6 +192,10 @@ wcNodeProcess.extend('NodeDMXUniversalJson', 'DMX(512 Channels) to/from JSON', '
 		this.createProperty('encodejson', wcPlay.PROPERTY.STRING, '', {description: 'NoDescriptionAvailable', input: true});
 		this.createProperty('decodejson', wcPlay.PROPERTY.STRING, '', {description: 'NoDescriptionAvailable', input: true});
 		this.createProperty('device', wcPlay.PROPERTY.STRING, '/dev/ttyUSB0', {description: "NoDescriptionAvailable", input: true});
+		this.createProperty('room', wcPlay.PROPERTY.STRING, '', {description: "NoDescriptionAvailable", input: true});
+		this.createProperty('rchannel', wcPlay.PROPERTY.NUMBER, 3, {description: "NoDescriptionAvailable", input: true});
+		this.createProperty('gchannel', wcPlay.PROPERTY.NUMBER, 2, {description: "NoDescriptionAvailable", input: true});
+		this.createProperty('bchannel', wcPlay.PROPERTY.NUMBER, 1, {description: "NoDescriptionAvailable", input: true});
 		this.createProperty('encoded', wcPlay.PROPERTY.STRING, '', {description: 'NoDescriptionAvailable', input: false, output: true});
 	},
 
@@ -269,35 +204,33 @@ wcNodeProcess.extend('NodeDMXUniversalJson', 'DMX(512 Channels) to/from JSON', '
 		var error = false;
 
 		var device = this.property('device');
+		var room = this.property('room');
+		var rchannel = this.property('rchannel');
+		var gchannel = this.property('gchannel');
+		var bchannel = this.property('bchannel');
 		createDeviceIfNotExists(device);
-		
+
 		if (name === 'encode')
 		{
 			var jsonString = this.property('encodejson');
 			if (!jsonString)
-				jsonString = '{}';
+				jsonString = '[]';
 
 			var json = JSON.parse(jsonString);
 			
-			if (!json.hasOwnProperty(this.name))
-			{
-				json[this.name] = {};
-			}
+			var red = DMXGeneric[device][rchannel];
+			var green = DMXGeneric[device][gchannel];
+			var blue = DMXGeneric[device][bchannel];
 			
 			if (typeof DMXGeneric[device] !== 'undefined')
 			{
-				var channels = {};
-				for (var i=1; i<=513; ++i)
-				{
-					channels[i] = DMXGeneric[device][i];
-				}
-				json[this.name] = channels;
+				json.push({"name":this.name, "room":room, "type":"DMXRGB", "r":red, "g":green, "b":blue});
 			}
 			else
 			{
 				error = true;
 			}
-			
+
 			this.property('encoded', JSON.stringify(json));
 			this.activateExit('encoded');
 		}
@@ -305,17 +238,19 @@ wcNodeProcess.extend('NodeDMXUniversalJson', 'DMX(512 Channels) to/from JSON', '
 		{
 			var jsonString = this.property('decodejson');
 			var json = JSON.parse(jsonString);
-			
-			if (json.hasOwnProperty(this.name))
+
+			for (var i = 0; i < json.length; i++)
 			{
-				var length = Object.keys(json[this.name]).length;
-				for (var i=0; i<length; i++)
+				match = json[i];
+				
+				if(match.name == this.name)
 				{
-					var index = Object.keys(json[this.name])[i];
-					DMXGeneric[device][parseInt(index)] = json[this.name][index];
+					DMXGeneric[device][rchannel] = match.r;
+					DMXGeneric[device][gchannel] = match.g;
+					DMXGeneric[device][bchannel] = match.b;
 				}
 			}
-			
+
 			this.activateExit('decoded');
 		}
 		

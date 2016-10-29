@@ -7,7 +7,7 @@
  * terms of the MIT license.
  **************************************************************************/
  
-wcNodeProcess.extend('NodeSetupWpi', 'Setup WPI', 'Core',
+wcPlayNodes.wcNodeProcess.extend('NodeSetupWpi', 'Setup WPI', 'Core',
 {
 	init: function(parent, pos)
 	{
@@ -32,7 +32,7 @@ wcNodeProcess.extend('NodeSetupWpi', 'Setup WPI', 'Core',
 	},
 });
 
-wcNodeProcess.extend('NodeGetSystemVariable', 'Get System Variable', 'Core',
+wcPlayNodes.wcNodeProcess.extend('NodeGetSystemVariable', 'Get System Variable', 'Core',
 {
 	init: function(parent, pos)
 	{
@@ -59,7 +59,7 @@ wcNodeProcess.extend('NodeGetSystemVariable', 'Get System Variable', 'Core',
 	},
 });
 
-wcNodeProcess.extend('NodeGetIpAddress', 'Get IP-Address', 'Core',
+wcPlayNodes.wcNodeProcess.extend('NodeGetIpAddress', 'Get IP-Address', 'Core',
 {
 	init: function(parent, pos)
 	{
@@ -127,7 +127,7 @@ wcNodeProcess.extend('NodeGetIpAddress', 'Get IP-Address', 'Core',
 	},
 });
 
-wcNodeProcess.extend('NodeUpdateRemoteStorage', 'Update Remote Storage', 'Core',
+wcPlayNodes.wcNodeProcess.extend('NodeUpdateRemoteStorage', 'Update Remote Storage', 'Core',
 {
 	init: function(parent, pos)
 	{

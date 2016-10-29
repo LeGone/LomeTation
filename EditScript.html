@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>wcPlay (Web Cabin)</title>
+    <meta name="description" content="wcPlay is a node based visual scripting tool for the web using the MIT license.">
+
+    <!-- External Modules -->
+    <link rel="stylesheet" type="text/css" href="wcPlay/bower_components/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="wcPlay/bower_components/webcabin-menu/Build/wcMenu.min.css"/>
+
+    <!-- Core Modules -->
+    <link rel="stylesheet" type="text/css" href="wcPlay/Code/editor.css"/>
+
+  </head>
+  <body style="background-color:white;">
+    <div class="playContainer"></div>
+    
+    <!-- External Modules -->
+    <script src="wcPlay/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="wcPlay/bower_components/FileSaver/FileSaver.min.js"></script>
+    <script src="wcPlay/bower_components/webcabin-undo-manager/wcUndoManager.js"></script>
+    <script src="wcPlay/bower_components/webcabin-menu/Build/wcMenu.min.js"></script>
+
+    <!-- Core Modules -->
+    <script src="wcPlay/Code/class.js"></script>
+    <script src="wcPlay/Code/play.js"></script>
+    <script src="wcPlay/Code/editor.js"></script>
+    <script src="wcPlay/Code/nodes/node.js"></script>
+    <script src="wcPlay/Code/nodes/entry.js"></script>
+    <script src="wcPlay/Code/nodes/process.js"></script>
+    <script src="wcPlay/Code/nodes/storage.js"></script>
+    <script src="wcPlay/Code/nodes/composite.js"></script>
+    <script src="wcPlay/Code/nodes/composite/compositescript.js"></script>
+    <script src="wcPlay/Code/nodes/composite/compositeentry.js"></script>
+    <script src="wcPlay/Code/nodes/composite/compositeexit.js"></script>
+    <script src="wcPlay/Code/nodes/composite/compositeproperty.js"></script>
+    <script src="wcPlay/Code/fuse.min.js"></script>
+
+    <!-- Generic Nodes -->
+    <script src="wcPlay/Code/nodes/entry/start.js"></script>
+    <script src="wcPlay/Code/nodes/entry/update.js"></script>
+    <script src="wcPlay/Code/nodes/entry/interval.js"></script>
+    <script src="wcPlay/Code/nodes/entry/remote.js"></script>
+    <script src="wcPlay/Code/nodes/entry/callremote.js"></script>
+    <script src="wcPlay/Code/nodes/process/delay.js"></script>
+    <script src="wcPlay/Code/nodes/process/operation.js"></script>
+    <script src="wcPlay/Code/nodes/process/strcat.js"></script>
+    <script src="wcPlay/Code/nodes/process/ajax.js"></script>
+    <script src="wcPlay/Code/nodes/process/fetch.js"></script>
+    <script src="wcPlay/Code/nodes/process/consolelog.js"></script>
+    <script src="wcPlay/Code/nodes/process/alert.js"></script>
+    <script src="wcPlay/Code/nodes/storage/global.js"></script>
+    <script src="wcPlay/Code/nodes/storage/string.js"></script>
+    <script src="wcPlay/Code/nodes/storage/number.js"></script>
+    <script src="wcPlay/Code/nodes/storage/toggle.js"></script>
+
+	<!-- Automation specific files -->
+	<script src="LomeTation/Nodes/Core.js"></script>
+	<script src="LomeTation/Nodes/GPIO.js"></script>
+	<script src="LomeTation/Nodes/LCD.js"></script>
+	<script src="LomeTation/Nodes/Network.js"></script>
+	<script src="LomeTation/Nodes/Branches.js"></script>
+	<script src="LomeTation/Nodes/Events.js"></script>
+	<script src="LomeTation/Nodes/Storages.js"></script>
+	<script src="LomeTation/Nodes/Json.js"></script>
+	<script src="LomeTation/Nodes/RelayCards/USB-RLY16L.js"></script>
+	<script src="LomeTation/Nodes/DMX/Generic.js"></script>
+	<script src="LomeTation/Nodes/OneWire.js"></script>
+
+    <!-- Example Node Types -->
+    <script src="wcPlay/Code/nodes/example/exampleviewport.js"></script>
+    <script src="wcPlay/Code/nodes/example/exampleproperties.js"></script>
+    <script src="wcPlay/Code/nodes/example/exampledynamic.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			// Create an instance of our Play engine.
+			var myPlay = new wcPlay({
+				silent: false,
+				updateRate: 10,
+				updateLimit: 100,
+				debugging: true,
+			});
+
+			// Start execution of the script.
+			//myPlay.start();
+
+			// Create an instance of our script editor.
+			var myPlayEditor = new wcPlayEditor('.playContainer',
+			{
+				readOnly: false
+			});
+
+			// Assign the current Play script to be rendered.
+			myPlayEditor.engine(myPlay);
+		});
+	</script>
+  </body>
+</html>

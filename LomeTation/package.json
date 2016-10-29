@@ -1,0 +1,14 @@
+{
+  "name": "LomeTation",
+  "description": "Home-Automation",
+  "author": "Raffael Holz (LeGone)",
+  "dependencies":
+  {
+    "serialport": ">= 0.0.0",
+    "node-schedule": ">= 0.0.0",
+    "moment": ">= 0.0.0",
+    "ws": ">= 0.0.0",
+    "mock-browser": ">= 0.0.0",
+    "jquery": ">= 0.0.0"
+  }
+}

@@ -7,7 +7,7 @@
  * terms of the MIT license.
  **************************************************************************/
  
-wcNodeProcess.extend('NodeLCDInit', 'LCD-Init', 'LCD',
+wcPlayNodes.wcNodeProcess.extend('NodeLCDInit', 'LCD-Init', 'LCD',
 {
   init: function(parent, pos)
   {
@@ -59,7 +59,7 @@ wcNodeProcess.extend('NodeLCDInit', 'LCD-Init', 'LCD',
   },
 });
 
-wcNodeProcess.extend('NodeLCDText', 'LCD-SetText', 'LCD',
+wcPlayNodes.wcNodeProcess.extend('NodeLCDText', 'LCD-SetText', 'LCD',
 {
   init: function(parent, pos)
   {
@@ -84,7 +84,7 @@ wcNodeProcess.extend('NodeLCDText', 'LCD-SetText', 'LCD',
   },
 });
 
-wcNodeProcess.extend('NodeLCDDisplay', 'LCD-Display', 'LCD',
+wcPlayNodes.wcNodeProcess.extend('NodeLCDDisplay', 'LCD-Display', 'LCD',
 {
   init: function(parent, pos)
   {
@@ -109,7 +109,7 @@ wcNodeProcess.extend('NodeLCDDisplay', 'LCD-Display', 'LCD',
   },
 });
 
-wcNodeProcess.extend('NodeLCDClear', 'LCD-Clear', 'LCD',
+wcPlayNodes.wcNodeProcess.extend('NodeLCDClear', 'LCD-Clear', 'LCD',
 {
   init: function(parent, pos)
   {

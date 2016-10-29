@@ -9,7 +9,7 @@
 
 RLY16L = [];
 
-wcNodeProcess.extend('NodeUSBRLY16LPosition', 'Position on USB-RLY16L', 'USB-RLY16L',
+wcPlayNodes.wcNodeProcess.extend('NodeUSBRLY16LPosition', 'Position on USB-RLY16L', 'USB-RLY16L',
 {
 	init: function(parent, pos)
 	{
@@ -46,7 +46,7 @@ wcNodeProcess.extend('NodeUSBRLY16LPosition', 'Position on USB-RLY16L', 'USB-RLY
 	},
 });
 
-wcNodeProcess.extend('NodeUSBRLY16LReadRelayStates', 'Read USB-RLY16L-States', 'USB-RLY16L',
+wcPlayNodes.wcNodeProcess.extend('NodeUSBRLY16LReadRelayStates', 'Read USB-RLY16L-States', 'USB-RLY16L',
 {
 	init: function(parent, pos)
 	{
@@ -93,7 +93,7 @@ wcNodeProcess.extend('NodeUSBRLY16LReadRelayStates', 'Read USB-RLY16L-States', '
 	},
 });
 
-wcNodeEntry.extend('NodeUSBRLY16LUpdater', 'Updates States on USB-RLY16L', 'USB-RLY16L',
+wcPlayNodes.wcNodeEntry.extend('NodeUSBRLY16LUpdater', 'Updates States on USB-RLY16L', 'USB-RLY16L',
 {
 	init: function(parent, pos)
 	{
@@ -117,14 +117,16 @@ wcNodeEntry.extend('NodeUSBRLY16LUpdater', 'Updates States on USB-RLY16L', 'USB-
 		RLY16L[device] = new SerialPort(device,
 		{
 			baudrate: 19200,
-			stopbits: 2
-		}, false);
+			stopbits: 2,
+			autoOpen: false
+		});
 		
 		RLY16L[device].open(function (error)
 		{
 			if (error)
 			{
 				console.log('failed to open: ' + error);
+				RLY16L[device] = undefined;
 			}
 			else
 			{
@@ -151,7 +153,7 @@ wcNodeEntry.extend('NodeUSBRLY16LUpdater', 'Updates States on USB-RLY16L', 'USB-
 				}
 				
 				RLY16L[device].on('error', function(error)
-				{								
+				{
 					console.log(error);
 				});
 				
@@ -177,7 +179,7 @@ wcNodeEntry.extend('NodeUSBRLY16LUpdater', 'Updates States on USB-RLY16L', 'USB-
 	},
 });
 
-wcNodeProcess.extend('NodeUSBRLY16LJson', 'USB-RLY16L-States to/from Json', 'USB-RLY16L',
+wcPlayNodes.wcNodeProcess.extend('NodeUSBRLY16LJson', 'USB-RLY16L-States to/from Json', 'USB-RLY16L',
 {
 	init: function(parent, pos)
 	{
@@ -226,85 +228,117 @@ wcNodeProcess.extend('NodeUSBRLY16LJson', 'USB-RLY16L-States to/from Json', 'USB
 		var relay7 = this.property('relay7');
 		var relay8 = this.property('relay8');
 		
-		if (name === 'encode')
+		if (typeof RLY16L[device] === 'undefined')
 		{
-			var jsonString = this.property('encodejson');
-		
-			if (!jsonString)
-				jsonString = '{}';
-
-			var json = JSON.parse(jsonString);
-			
-			if (!json.hasOwnProperty(room))
-			{
-				json[room] = {};
-			}
-			
-			var attributes = {};
-			attributes[relay1] = RLY16L[device][0];
-			attributes[relay2] = RLY16L[device][1];
-			attributes[relay3] = RLY16L[device][2];
-			attributes[relay4] = RLY16L[device][3];
-			attributes[relay5] = RLY16L[device][4];
-			attributes[relay6] = RLY16L[device][5];
-			attributes[relay7] = RLY16L[device][6];
-			attributes[relay8] = RLY16L[device][7];
-			json[room][this.name] = attributes;
-			
-			this.property('encoded', JSON.stringify(json));
-			this.activateExit('encoded');
+			error = true;
 		}
 		else
 		{
-			var jsonString = this.property('decodejson');
-			if (jsonString)
+			if (name === 'encode')
 			{
+				var jsonString = this.property('encodejson');
+			
+				if (!jsonString)
+					jsonString = '{}';
+
 				var json = JSON.parse(jsonString);
 				
-				if (json.hasOwnProperty(room))
+				if (!json.hasOwnProperty(room))
 				{
-					if (json[room].hasOwnProperty(this.name))
-					{
-						if (json[room][this.name].hasOwnProperty(relay1))
-						{
-							RLY16L[device][0] = json[room][this.name][relay1];
-						}
-						if (json[room][this.name].hasOwnProperty(relay2))
-						{
-							RLY16L[device][1] = json[room][this.name][relay2];
-						}
-						if (json[room][this.name].hasOwnProperty(relay3))
-						{
-							RLY16L[device][2] = json[room][this.name][relay3];
-						}
-						if (json[room][this.name].hasOwnProperty(relay4))
-						{
-							RLY16L[device][3] = json[room][this.name][relay4];
-						}
-						if (json[room][this.name].hasOwnProperty(relay5))
-						{
-							RLY16L[device][4] = json[room][this.name][relay5];
-						}
-						if (json[room][this.name].hasOwnProperty(relay6))
-						{
-							RLY16L[device][5] = json[room][this.name][relay6];
-						}
-						if (json[room][this.name].hasOwnProperty(relay7))
-						{
-							RLY16L[device][6] = json[room][this.name][relay7];
-						}
-						if (json[room][this.name].hasOwnProperty(relay8))
-						{
-							RLY16L[device][7] = json[room][this.name][relay8];
-						}
-					}
+					json[room] = {};
 				}
-				this.activateExit('decoded');
+				
+				var attributes = {};
+				if (relay1 !== 'unused')
+				{
+					attributes[relay1] = RLY16L[device][0];
+				}
+				if (relay2 !== 'unused')
+				{
+					attributes[relay2] = RLY16L[device][1];
+				}
+				if (relay3 !== 'unused')
+				{
+					attributes[relay3] = RLY16L[device][2];
+				}
+				if (relay4 !== 'unused')
+				{
+					attributes[relay4] = RLY16L[device][3];
+				}
+				if (relay5 !== 'unused')
+				{
+					attributes[relay5] = RLY16L[device][4];
+				}
+				if (relay6 !== 'unused')
+				{
+					attributes[relay6] = RLY16L[device][5];
+				}
+				if (relay7 !== 'unused')
+				{
+					attributes[relay7] = RLY16L[device][6];
+				}
+				if (relay8 !== 'unused')
+				{
+					attributes[relay8] = RLY16L[device][7];
+				}
+				
+				json[room][this.name] = attributes;
+				
+				this.property('encoded', JSON.stringify(json));
+				this.activateExit('encoded');
 			}
 			else
 			{
-				console.error('[USB-RLY16L][' + this.name + '] Empty Input-Json!');
-				error = true;
+				var jsonString = this.property('decodejson');
+				if (jsonString)
+				{
+					var json = JSON.parse(jsonString);
+					
+					if (json.hasOwnProperty(room))
+					{
+						if (json[room].hasOwnProperty(this.name))
+						{
+							if (json[room][this.name].hasOwnProperty(relay1))
+							{
+								RLY16L[device][0] = json[room][this.name][relay1];
+							}
+							if (json[room][this.name].hasOwnProperty(relay2))
+							{
+								RLY16L[device][1] = json[room][this.name][relay2];
+							}
+							if (json[room][this.name].hasOwnProperty(relay3))
+							{
+								RLY16L[device][2] = json[room][this.name][relay3];
+							}
+							if (json[room][this.name].hasOwnProperty(relay4))
+							{
+								RLY16L[device][3] = json[room][this.name][relay4];
+							}
+							if (json[room][this.name].hasOwnProperty(relay5))
+							{
+								RLY16L[device][4] = json[room][this.name][relay5];
+							}
+							if (json[room][this.name].hasOwnProperty(relay6))
+							{
+								RLY16L[device][5] = json[room][this.name][relay6];
+							}
+							if (json[room][this.name].hasOwnProperty(relay7))
+							{
+								RLY16L[device][6] = json[room][this.name][relay7];
+							}
+							if (json[room][this.name].hasOwnProperty(relay8))
+							{
+								RLY16L[device][7] = json[room][this.name][relay8];
+							}
+						}
+					}
+					this.activateExit('decoded');
+				}
+				else
+				{
+					console.error('[USB-RLY16L][' + this.name + '] Empty Input-Json!');
+					error = true;
+				}
 			}
 		}
 		

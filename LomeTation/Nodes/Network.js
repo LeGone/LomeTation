@@ -7,7 +7,7 @@
  * terms of the MIT license.
  **************************************************************************/
  
-wcNodeProcess.extend('NodeNet', 'Net-TCP', 'Net',
+wcPlayNodes.wcNodeProcess.extend('NodeNet', 'Net-TCP', 'Net',
 {
 	init: function(parent, pos)
 	{
@@ -60,7 +60,7 @@ wcNodeProcess.extend('NodeNet', 'Net-TCP', 'Net',
 });
 
 var services = [];
-wcNodeEntry.extend('NodeNetWebSocketService', 'WebSocket-Service', 'Net',
+wcPlayNodes.wcNodeEntry.extend('NodeNetWebSocketService', 'WebSocket-Service', 'Net',
 {
 	init: function(parent, pos)
 	{
@@ -116,7 +116,7 @@ wcNodeEntry.extend('NodeNetWebSocketService', 'WebSocket-Service', 'Net',
 	},
 });
 
-wcNodeProcess.extend('NodeNetWebSocketSend', 'WebSocket-Send', 'Net',
+wcPlayNodes.wcNodeProcess.extend('NodeNetWebSocketSend', 'WebSocket-Send', 'Net',
 {
 	init: function(parent, pos)
 	{
@@ -157,7 +157,7 @@ wcNodeProcess.extend('NodeNetWebSocketSend', 'WebSocket-Send', 'Net',
 	},
 });
 
-wcNodeProcess.extend('NodeNetWebSocketClose', 'WebSocket-Close', 'Net',
+wcPlayNodes.wcNodeProcess.extend('NodeNetWebSocketClose', 'WebSocket-Close', 'Net',
 {
 	init: function(parent, pos)
 	{
@@ -194,7 +194,7 @@ wcNodeProcess.extend('NodeNetWebSocketClose', 'WebSocket-Close', 'Net',
 	},
 });
 
-wcNodeEntry.extend('NodeNetJsonService', 'Json-Service', 'Net',
+wcPlayNodes.wcNodeEntry.extend('NodeNetJsonService', 'Json-Service', 'Net',
 {
 	init: function(parent, pos)
 	{
@@ -275,7 +275,7 @@ wcNodeEntry.extend('NodeNetJsonService', 'Json-Service', 'Net',
 	},
 });
 
-wcNodeProcess.extend('NodeNetRGBLedObsolete', 'RGB-Leds(obsolete)', 'Net',
+wcPlayNodes.wcNodeProcess.extend('NodeNetRGBLedObsolete', 'RGB-Leds(obsolete)', 'Net',
 {
 	init: function(parent, pos)
 	{

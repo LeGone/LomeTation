@@ -7,7 +7,7 @@
  * terms of the MIT license.
  **************************************************************************/
 
-wcNodeProcess.extend('NodeJson1v', 'Json-1v-en/decode', 'Json',
+wcPlayNodes.wcNodeProcess.extend('NodeJson1v', 'Json-1v-en/decode', 'Json',
 {
 	init: function(parent, pos)
 	{
@@ -45,27 +45,11 @@ wcNodeProcess.extend('NodeJson1v', 'Json-1v-en/decode', 'Json',
 		{
 			var jsonString = this.property('encodejson');
 			if (!jsonString)
-				jsonString = '{}';
+				jsonString = '[]';
 
 			var json = JSON.parse(jsonString);
 			
-			if (!json.hasOwnProperty(room))
-			{
-				json[room] = {};
-			}
-			
-			if (!json[room].hasOwnProperty(type))
-			{
-				json[room][type] = {};
-			}
-			
-			json[room][type][this.name] = value;
-			
-			/* Only if more than one value
-			var attributes = {};
-			attributes['value'] = value;
-			json[room][this.name] = attributes;
-			*/
+			json.push({"name":this.name, "room":room, "type":type, "value":value});
 			
 			this.property('encoded', JSON.stringify(json));
 			this.activateExit('encoded');

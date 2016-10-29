@@ -7,7 +7,7 @@
  * terms of the MIT license.
  **************************************************************************/
  
-wcNodeProcess.extend('NodeGPIOPinMode', 'GPIO Pin Mode', 'GPIO',
+wcPlayNodes.wcNodeProcess.extend('NodeGPIOPinMode', 'GPIO Pin Mode', 'GPIO',
 {
   init: function(parent, pos)
   {
@@ -35,7 +35,7 @@ wcNodeProcess.extend('NodeGPIOPinMode', 'GPIO Pin Mode', 'GPIO',
   },
 });
 
-wcNodeProcess.extend('NodeGPIOPullUpDnControl', 'GPIO Pull Up/Dn Control', 'GPIO',
+wcPlayNodes.wcNodeProcess.extend('NodeGPIOPullUpDnControl', 'GPIO Pull Up/Dn Control', 'GPIO',
 {
   init: function(parent, pos)
   {
@@ -64,7 +64,7 @@ wcNodeProcess.extend('NodeGPIOPullUpDnControl', 'GPIO Pull Up/Dn Control', 'GPIO
 });
 
 
-wcNodeProcess.extend('NodeGPIOWriteDigital', 'GPIO Write Digital', 'GPIO',
+wcPlayNodes.wcNodeProcess.extend('NodeGPIOWriteDigital', 'GPIO Write Digital', 'GPIO',
 {
   init: function(parent, pos)
   {
@@ -91,7 +91,7 @@ wcNodeProcess.extend('NodeGPIOWriteDigital', 'GPIO Write Digital', 'GPIO',
   },
 });
 
-wcNodeProcess.extend('NodeGPIOReadDigital', 'GPIO Read Digital', 'GPIO',
+wcPlayNodes.wcNodeProcess.extend('NodeGPIOReadDigital', 'GPIO Read Digital', 'GPIO',
 {
   init: function(parent, pos)
   {
@@ -129,7 +129,7 @@ wcNodeProcess.extend('NodeGPIOReadDigital', 'GPIO Read Digital', 'GPIO',
   },
 });
 
-wcNodeProcess.extend('NodeGPIOWritePWM', 'GPIO Write PWM', 'GPIO',
+wcPlayNodes.wcNodeProcess.extend('NodeGPIOWritePWM', 'GPIO Write PWM', 'GPIO',
 {
   init: function(parent, pos)
   {

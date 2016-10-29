@@ -7,7 +7,7 @@
  * terms of the MIT license.
  **************************************************************************/
  
-wcNodeProcess.extend('NodeBranch', 'Compare', 'Branches',
+wcPlayNodes.wcNodeProcess.extend('NodeBranch', 'Compare', 'Branches',
 {
   init: function(parent, pos)
   {
@@ -79,7 +79,7 @@ wcNodeProcess.extend('NodeBranch', 'Compare', 'Branches',
   },
 });
 
-wcNodeProcess.extend('NodeBranchMultiEquals', 'MultiEquals', 'Branches',
+wcPlayNodes.wcNodeProcess.extend('NodeBranchMultiEquals', 'MultiEquals', 'Branches',
 {
   init: function(parent, pos)
   {
